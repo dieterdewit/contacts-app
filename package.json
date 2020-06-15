@@ -1,0 +1,31 @@
+{
+  "name": "contacts-app",
+  "version": "1.0.0",
+  "description": "React & Next.js app for Contacts Management",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kamiryu-sama/contacts-app.git"
+  },
+  "author": "Dieter de Wit",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kamiryu-sama/contacts-app/issues"
+  },
+  "homepage": "https://github.com/kamiryu-sama/contacts-app#readme",
+  "dependencies": {
+    "@material-ui/core": "^4.10.2",
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/styles": "^4.10.0",
+    "clsx": "^1.1.1",
+    "next": "^9.4.4",
+    "prop-types": "^15.7.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "url-loader": "^4.1.0"
+  }
+}
