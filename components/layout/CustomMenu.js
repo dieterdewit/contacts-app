@@ -11,9 +11,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Link from "../Link";
 
 const useStyles = makeStyles((theme) => ({
-    paper: {
-        marginRight: theme.spacing(2),
-    },
     MenuIcon: {
         fontSize: theme.typography.pxToRem(30),
         color: theme.palette.primary.main,

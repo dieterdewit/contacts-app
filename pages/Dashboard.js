@@ -1,14 +1,14 @@
 import React from 'react';
 import Head from "next/head";
 
-export default function Documentation() {
+export default function Dashboard() {
     return (
         <React.Fragment>
             <Head>
-                <title>Documentation | Contacts App</title>
+                <title>Dashboard | Contacts App</title>
                 <meta
                     name="description"
-                    content="Documentation for Contacts App"
+                    content="Dashboard for Contacts App"
                 />
             </Head>
         </React.Fragment>

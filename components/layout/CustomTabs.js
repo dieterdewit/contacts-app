@@ -4,6 +4,8 @@ import Tabs from "@material-ui/core/Tabs";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
+import {connect} from 'react-redux';
+import { resetTabs, pageOneTab, pageTwoTab } from '../../redux/actions/tabsActions';
 import Link from "../Link";
 import theme from '../../src/theme';
 
@@ -45,20 +47,11 @@ const StyledTab = withStyles(theme => ({
     />);
 
 
-export default class CustomizedTabs extends Component {
+class CustomizedTabs extends Component {
+    static getInitialProps({store}) {}
+
     constructor(props) {
         super(props);
-        this.state = {
-            value: -1
-        };
-    }
-
-    handleChange = (event, newValue) => {
-        this.setState({ value: newValue });
-    }
-
-    logoClick = () => {
-        this.setState({ value: -1 })
     }
 
     render () {
@@ -70,7 +63,7 @@ export default class CustomizedTabs extends Component {
                     naked
                     href="/"
                     style={{ height: 60, width: 400, color: theme.palette.primary.main }}
-                    onClick={ this.logoClick }
+                    onClick={ this.props.resetTabs }
                 >
                     <Typography
                         style={{ fontWeight: 'bold' }}
@@ -84,8 +77,7 @@ export default class CustomizedTabs extends Component {
                     style={{ marginLeft: '8%' }}
                 >
                     <StyledTabs
-                        value={ this.state.value }
-                        onChange={ this.handleChange }
+                        value={ this.props.selected }
                         aria-label="menuTabs"
                     >
                         <StyledTab
@@ -94,13 +86,15 @@ export default class CustomizedTabs extends Component {
                             naked
                             href="/Contacts"
                             style={{ fontSize: 20 }}
+                            onClick={ this.props.pageOneTabs }
                         />
                         <StyledTab
-                            label="Documentation"
+                            label="Dashboard"
                             component={ Link }
                             naked
-                            href="/Documentation"
+                            href="/Dashboard"
                             style={{ fontSize: 20 }}
+                            onClick={ this.props.pageTwoTabs }
                         />
                     </StyledTabs>
                 </Typography>
@@ -108,3 +102,15 @@ export default class CustomizedTabs extends Component {
         )
     }
 }
+
+const mapStateToProps = state => ({
+    selected: state.selected.value
+});
+
+const mapDispatchToProps = {
+    pageOneTabs: pageOneTab,
+    pageTwoTabs: pageTwoTab,
+    resetTabs: resetTabs,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CustomizedTabs);
