@@ -13,6 +13,7 @@ import CustomizedTabs from "./CustomTabs";
 const useStyles = makeStyles(theme => ({
     toolBar: {
         backgroundColor: theme.palette.background.default,
+        opacity: 0.97
     },
     Title: {
         height: 60,
