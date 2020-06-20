@@ -10,7 +10,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { connect } from 'react-redux';
-import { loginScreen } from '../redux/actions/loginActions';
+import { loginScreen } from '../redux/actions/buttonActions';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -71,7 +71,7 @@ function Index(props) {
                     style={{ justifyContent: 'center' }}
                 >
                     {
-                        !props.login &&
+                        !props.button &&
                         <Grid item>
                             <Typography className={classes.secondary}>
                                 Don't have an Account?
@@ -122,7 +122,7 @@ function Index(props) {
                         </Grid>
                     }
                     {
-                        props.login &&
+                        props.button &&
                         <Grid item>
                             <Typography className={classes.secondary}>
                                 Already own an Account?
@@ -179,7 +179,7 @@ function Index(props) {
 }
 
 const mapStateToProps = state => ({
-    login: state.login.value
+    button: state.button.value
 });
 
 const mapDispatchToProps = {

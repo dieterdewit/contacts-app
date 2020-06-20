@@ -1,7 +1,6 @@
 // Initialize Pages with Persisting Page Layout
 
 import React from 'react';
-import App from 'next/app';
 import Head from 'next/head';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
@@ -9,9 +8,11 @@ import withRedux from "next-redux-wrapper";
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from '../src/theme';
-import store from '../redux/store';
+import Store from '../redux/store';
 import Footer from "../components/layout/Footer";
 import AppHeader from "../components/layout/AppBar";
+
+const store = Store();
 
 function MyApp(props) {
     const { Component, pageProps } = props;

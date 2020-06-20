@@ -93,9 +93,9 @@ export default function CustomMenu() {
                                         onClick={ handleClose }
                                         component={ Link }
                                         naked
-                                        href="/Documentation"
+                                        href="/Dashboard"
                                     >
-                                        Documentation
+                                        Dashboard
                                     </MenuItem>
                                 </MenuList>
                             </ClickAwayListener>

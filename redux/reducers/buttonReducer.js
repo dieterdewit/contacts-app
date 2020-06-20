@@ -1,7 +1,7 @@
 // Initialize State
-import { LOGIN_SCREEN } from '../actions/loginActions';
+import { LOGIN_SCREEN } from '../actions/buttonActions';
 
-const loginReducer = (state = { value: false }, action) => {
+const buttonReducer = (state = { value: false }, action) => {
     switch (action.type) {
         case LOGIN_SCREEN:
             return { ...state, value: !state.value }
@@ -10,5 +10,5 @@ const loginReducer = (state = { value: false }, action) => {
     }
 };
 
-export default loginReducer;
+export default buttonReducer;
 

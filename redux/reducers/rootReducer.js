@@ -1,11 +1,13 @@
 // Combine all Reducers
 import { combineReducers } from 'redux';
 import tabsReducer from "./tabsReducer";
-import loginReducer from "./loginReducer";
+import buttonReducer from "./buttonReducer";
+import contactsReducer from "./contactsReducer";
 
 const rootReducer = combineReducers({
     selected: tabsReducer,
-    login: loginReducer
+    button: buttonReducer,
+    contacts: contactsReducer
 });
 
 export default rootReducer;
