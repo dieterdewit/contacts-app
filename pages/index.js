@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Head from "next/head";
 import { makeStyles } from '@material-ui/core/styles';
 import Box from "@material-ui/core/Box";
@@ -10,7 +10,12 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { connect } from 'react-redux';
-import { loginScreen } from '../redux/actions/buttonActions';
+import { loginScreen, success, error } from '../redux/actions/buttonActions';
+import { register } from "../redux/actions/registerActons";
+import { login } from "../redux/actions/loginActions";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+import Router from 'next/router';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -48,8 +53,55 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 function Index(props) {
     const classes = useStyles();
+
+    let new_username;
+    let new_password;
+    let log_username;
+    let log_password;
+
+    useEffect( () => {
+        if (props.state.registered.registered.status === 200){
+            props.success();
+            props.loginScreen();
+        }
+        else if (props.state.registered.registered.status === 400){
+            props.error();
+        }
+    }, [props.state.registered.registered.status])
+
+    useEffect( () => {
+        if (props.state.logged.logged.status === 200){
+            props.success();
+            Router.push('/Contacts');
+        }
+        else if (props.state.logged.logged.status === 400){
+            props.error();
+        }
+    }, [props.state.logged.logged.status])
+
+    const handleRegister = e => {
+        e.preventDefault();
+        let username = new_username.value;
+        let password = new_password.value;
+
+        const new_user = { username, password };
+        props.register(new_user);
+    };
+
+    const handleLogin = e => {
+        e.preventDefault();
+        let username = log_username.value;
+        let password = log_password.value;
+
+        const user = { username, password };
+        props.login(user);
+    };
 
     return (
         <React.Fragment>
@@ -71,7 +123,7 @@ function Index(props) {
                     style={{ justifyContent: 'center' }}
                 >
                     {
-                        !props.button &&
+                        props.button &&
                         <Grid item>
                             <Typography className={classes.secondary}>
                                 Don't have an Account?
@@ -90,6 +142,9 @@ function Index(props) {
                                     variant="outlined"
                                     type={"username"}
                                     style={{width: '100%'}}
+                                    inputRef={ref => {
+                                        new_username = ref;
+                                    }}
                                 />
                             </Grid>
                             <Grid className={classes.inputLine}>
@@ -100,12 +155,16 @@ function Index(props) {
                                     variant="outlined"
                                     type={"password"}
                                     style={{width: '100%'}}
+                                    inputRef={ref => {
+                                        new_password = ref;
+                                    }}
                                 />
                             </Grid>
                             <Button
                                 disableRipple
                                 className={ classes.submitButton }
                                 variant={ "outlined" }
+                                onClick={handleRegister}
                             >
                                 Register
                             </Button>
@@ -122,7 +181,7 @@ function Index(props) {
                         </Grid>
                     }
                     {
-                        props.button &&
+                        !props.button &&
                         <Grid item>
                             <Typography className={classes.secondary}>
                                 Already own an Account?
@@ -141,6 +200,9 @@ function Index(props) {
                                     variant="outlined"
                                     type={"username"}
                                     style={{width: '100%'}}
+                                    inputRef={ref => {
+                                        log_username = ref;
+                                    }}
                                 />
                             </Grid>
                             <Grid className={classes.inputLine}>
@@ -151,12 +213,16 @@ function Index(props) {
                                     variant="outlined"
                                     type={"password"}
                                     style={{width: '100%'}}
+                                    inputRef={ref => {
+                                        log_password = ref;
+                                    }}
                                 />
                             </Grid>
                             <Button
                                 disableRipple
                                 className={ classes.submitButton }
                                 variant={ "outlined" }
+                                onClick={handleLogin}
                             >
                                 LogIn
                             </Button>
@@ -172,6 +238,16 @@ function Index(props) {
                             </Button>
                         </Grid>
                     }
+                    <Snackbar open={props.stats} autoHideDuration={2000} onClose={props.success}>
+                        <Alert onClose={props.success} severity="success">
+                            SUCCESSFUL
+                        </Alert>
+                    </Snackbar>
+                    <Snackbar open={props.err} autoHideDuration={2000} onClose={props.error}>
+                        <Alert onClose={props.error} severity="error">
+                            ERROR: INCOMPLETE OR ERRONEOUS DATA
+                        </Alert>
+                    </Snackbar>
                 </Box>
             </Container>
         </React.Fragment>
@@ -179,13 +255,27 @@ function Index(props) {
 }
 
 const mapStateToProps = state => ({
-    button: state.button.value
+    button: state.button.value,
+    stats: state.button.stats,
+    err: state.button.err,
+    state
 });
 
 const mapDispatchToProps = {
     loginScreen: loginScreen,
+    success: success,
+    error: error,
+    register: register,
+    login: login
 };
 
-Index.getInitialProps = async ({ store }) => {}
+Index.getInitialProps = async ({ store }) => {
+    await store.dispatch(register());
+    await store.dispatch(login());
+    return { custom: 'custom' };
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(Index);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+    )(Index);

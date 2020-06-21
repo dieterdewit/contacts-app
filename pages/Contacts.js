@@ -33,4 +33,4 @@ Contacts.getInitialProps = async ({ store, isServer, pathname, query }) => {
 export default connect(
     state => state,
     { getContacts }
-)(Contacts);
+    )(Contacts);
