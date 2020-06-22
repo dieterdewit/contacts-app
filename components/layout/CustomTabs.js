@@ -6,6 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from 'react-redux';
 import { resetTabs, pageOneTab, pageTwoTab } from '../../redux/actions/tabsActions';
+import { logout } from "../../redux/actions/loginActions";
 import Link from "../Link";
 import theme from '../../src/theme';
 
@@ -72,6 +73,7 @@ class CustomizedTabs extends Component {
                         CONTACTS APP
                     </Typography>
                 </Grid>
+                {this.props.isAuthenticated && (
                 <Typography
                     component="span"
                     style={{ marginLeft: '8%' }}
@@ -89,28 +91,28 @@ class CustomizedTabs extends Component {
                             onClick={ this.props.pageOneTabs }
                         />
                         <StyledTab
-                            label="Dashboard"
-                            component={ Link }
-                            naked
-                            href="/Dashboard"
+                            label="LogOut"
                             style={{ fontSize: 20 }}
-                            onClick={ this.props.pageTwoTabs }
+                            onClick={ this.props.logout }
                         />
                     </StyledTabs>
                 </Typography>
+                )}
             </React.Fragment>
         )
     }
 }
 
 const mapStateToProps = state => ({
-    selected: state.selected.value
+    selected: state.selected.value,
+    isAuthenticated: !!state.logged.logged.token
 });
 
 const mapDispatchToProps = {
     pageOneTabs: pageOneTab,
     pageTwoTabs: pageTwoTab,
     resetTabs: resetTabs,
+    logout: logout
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CustomizedTabs);

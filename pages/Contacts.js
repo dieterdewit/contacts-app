@@ -1,12 +1,10 @@
 import React from 'react';
 import Head from "next/head";
-import { connect } from 'react-redux';
-import { getContacts } from "../redux/actions/contactsAction";
+import { checkServerSideCookie } from "../redux/actions/loginActions";
 
 function Contacts(props) {
     const handleSubmit = e => {
         e.preventDefault();
-        props.getContacts();
     };
 
     return (
@@ -25,12 +23,12 @@ function Contacts(props) {
     );
 }
 
-Contacts.getInitialProps = async ({ store, isServer, pathname, query }) => {
-    await store.dispatch(getContacts());
-    return { custom: 'custom' };
+Contacts.getInitialProps = async ctx => {
+    const ssrToken = checkServerSideCookie(ctx);
+
+    const { token } = ctx.store.getState().logged.logged.token;
+
+
 };
 
-export default connect(
-    state => state,
-    { getContacts }
-    )(Contacts);
+export default Contacts;

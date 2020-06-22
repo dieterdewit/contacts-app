@@ -4,7 +4,7 @@ const loginReducer = (state = { logged: '' }, action) => {
     switch (action.type) {
         case 'LOGIN':
             return { ...state, logged: action.payload };
-        case LOGOUT:
+        case 'LOGOUT':
             return { logged: '' };
         default:
             return state;

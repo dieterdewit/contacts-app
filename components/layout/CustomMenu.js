@@ -9,6 +9,8 @@ import Popper from '@material-ui/core/Popper';
 import MenuList from '@material-ui/core/MenuList';
 import { makeStyles } from '@material-ui/core/styles';
 import Link from "../Link";
+import { logout } from "../../redux/actions/loginActions";
+import {connect} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
     MenuIcon: {
@@ -17,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function CustomMenu() {
+function CustomMenu(props) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
@@ -61,6 +63,7 @@ export default function CustomMenu() {
             >
                 <MenuRoundedIcon className={ classes.MenuIcon }/>
             </IconButton>
+            {props.isAuthenticated && (
             <Popper
                 open={ open }
                 anchorEl={ anchorRef.current }
@@ -90,12 +93,9 @@ export default function CustomMenu() {
                                         Contacts Book
                                     </MenuItem>
                                     <MenuItem
-                                        onClick={ handleClose }
-                                        component={ Link }
-                                        naked
-                                        href="/Dashboard"
+                                        onClick={ props.logout }
                                     >
-                                        Dashboard
+                                        LogOut
                                     </MenuItem>
                                 </MenuList>
                             </ClickAwayListener>
@@ -103,6 +103,17 @@ export default function CustomMenu() {
                     </Grow>
                 )}
             </Popper>
+            )}
         </React.Fragment>
     );
 }
+
+const mapStateToProps = state => ({
+    isAuthenticated: !!state.logged.logged.token
+});
+
+const mapDispatchToProps = {
+    logout: logout
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CustomMenu);

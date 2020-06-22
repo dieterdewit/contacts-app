@@ -1,7 +1,6 @@
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
 
-import Router from 'next/router';
 import axios from 'axios';
 import cookie from 'js-cookie';
 
@@ -24,8 +23,8 @@ export const login = user => dispatch =>
 export const logout = () => {
     return dispatch => {
         removeCookie('token');
-        Router.push('/');
-        dispatch({ type: LOGOUT });
+        //Router.push('/');
+        dispatch({ type: 'LOGOUT' });
     };
 };
 
@@ -63,4 +62,14 @@ const getCookieFromServer = (key, req) => {
         return undefined;
     }
     return rawCookie.split('=')[1];
+};
+
+export const checkServerSideCookie = ctx => {
+    if (ctx.isServer) {
+        if (ctx.req.headers.cookie) {
+            return getCookie('token', ctx.req);
+        }
+    } else {
+        return ctx.store.getState().logged.logged.token;
+    }
 };
