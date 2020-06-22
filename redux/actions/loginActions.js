@@ -15,6 +15,7 @@ export const login = user => dispatch =>
     })//.then(data => data.json())
         .then(response => {
             setCookie('token', response.data.token);
+            setCookie('userId', response.data.userId)
             //Router.push('/');
             dispatch({ type: 'LOGIN', payload: response.data })
         })
