@@ -9,12 +9,21 @@ import Container from "@material-ui/core/Container";
 import {makeStyles} from "@material-ui/core/styles";
 import Divider from "@material-ui/core/Divider";
 import Pagination from "@material-ui/lab/Pagination";
+import Box from "@material-ui/core/Box";
 
 const useStyles = makeStyles(theme => ({
     title: {
         marginTop: 30,
         color: theme.palette.primary.main,
         fontWeight: 'bold'
+    },
+    RespImage: {
+        maxHeight: 390,
+        maxWidth: '100%',
+    },
+    BoxImage: {
+        maxWidth: '100%',
+        maxHeight: '100%',
     },
 }));
 
@@ -55,10 +64,29 @@ function Contacts({contacts}) {
                 <Grid item>
                     {
                         contacts.slice((page-1)*10, (page*10)-1).map(
-                            ({full_name, email, updatedOn}) =>
+                            ({full_name, email, image_uri, updatedOn}) =>
                                 <Paper
                                     style={{ marginBottom: 10, padding: 10 }}
                                 >
+                                    <Grid
+                                        container
+                                        justify="center"
+                                    >
+                                        <Grid item xs={12}>
+                                            <Grid container justify="center">
+                                                <Box
+                                                    flexGrow={1}
+                                                    p={1}
+                                                    className={ classes.BoxImage }
+                                                >
+                                                    <img
+                                                        src={image_uri}
+                                                        className={ classes.RespImage }
+                                                    />
+                                                </Box>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
                                     <Typography variant='h4'>
                                         {full_name}
                                     </Typography>

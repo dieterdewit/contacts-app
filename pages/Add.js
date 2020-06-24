@@ -14,10 +14,14 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import MailIcon from '@material-ui/icons/Mail';
 import ImageIcon from '@material-ui/icons/Image';
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
+import IconButton from "@material-ui/core/IconButton";
+import Link from "../components/Link"
+import Box from "@material-ui/core/Box";
 
 const useStyles = makeStyles(theme => ({
     title: {
@@ -44,6 +48,15 @@ const useStyles = makeStyles(theme => ({
         color: theme.palette.secondary.main,
         fontWeight: 'bold'
     },
+    BackButtonIcon: {
+        marginTop: 5,
+        marginBottom: 12,
+    },
+    BackButtonText: {
+        fontWeight: 'bold',
+        color: 'dimgray',
+        alignSelf: 'flex-end',
+    },
 }));
 
 class ImagesUp extends Component {
@@ -57,7 +70,6 @@ class ImagesUp extends Component {
     }
 
     handleChange = (ev) => {
-        console.log(this.props.contactId)
         this.setState({success: false, url : ""});
     }
 
@@ -70,7 +82,8 @@ class ImagesUp extends Component {
 
         axios.post("http://localhost:3100/api/images",{
             fileName : fileName,
-            fileType : fileType
+            fileType : fileType,
+            contactId: this.props.contactId
         })
             .then(response => {
                 const returnData = response.data.data.returnData;
@@ -207,6 +220,31 @@ function Add({ atts }) {
                 />
             </Head>
             <Container maxWidth='lg'>
+                <IconButton
+                    aria-label="Atras"
+                    className={classes.BackButtonIcon}
+                    component={Link}
+                    naked
+                    href={`/Contacts`}
+                >
+                    <Box
+                        display="flex"
+                        flexDirection="row"
+                        p={1}
+                        css={{ height: 25 }}
+                    >
+                        <Grid
+                            container
+                            spacing={2}
+                        >
+                            <ArrowBackIcon/>
+                            <Grid item xs={1} />
+                            <Typography className={classes.BackButtonText}>
+                                Back to Contacts
+                            </Typography>
+                        </Grid>
+                    </Box>
+                </IconButton>
                 <Typography variant='h3' className={classes.title}>
                     Add a Contact:
                 </Typography>
