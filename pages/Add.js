@@ -22,6 +22,11 @@ import Alert from "@material-ui/lab/Alert";
 import IconButton from "@material-ui/core/IconButton";
 import Link from "../components/Link"
 import Box from "@material-ui/core/Box";
+import PhoneIcon from '@material-ui/icons/Phone';
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
 
 const useStyles = makeStyles(theme => ({
     title: {
@@ -56,6 +61,13 @@ const useStyles = makeStyles(theme => ({
         fontWeight: 'bold',
         color: 'dimgray',
         alignSelf: 'flex-end',
+    },
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 120,
+    },
+    selectEmpty: {
+        marginTop: theme.spacing(2),
     },
 }));
 
@@ -174,10 +186,17 @@ function Add({ atts }) {
 
     let name;
     let email;
+    let phone_number;
 
     const [openSuccess, setOpenSuccess] = React.useState(false);
     const [openError, setOpenError] = React.useState(false);
     const [contactId, setContactId] = React.useState('');
+    const [phone, setPhone] = React.useState('');
+
+    const handleChange = event => {
+        setPhone(event.target.value);
+        console.log(phone)
+    };
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') { return; }
@@ -203,6 +222,30 @@ function Add({ atts }) {
                else {
                    setOpenError(true);
                }
+            })
+            .catch(error => {
+                setOpenError(true);
+                alert(JSON.stringify(error));
+            })
+    }
+
+    const handlePhone = e => {
+        e.preventDefault();
+        axios.post(`http://localhost:3100/api/phone/` + contactId,{
+            phone_number : phone_number.value,
+            phone_tag : phone
+        }, {
+            headers: {
+                token: atts.token || atts.ssrToken
+            }
+        })
+            .then(response => {
+                if(response.data.status === 200){
+                    setOpenSuccess(true);
+                }
+                else {
+                    setOpenError(true);
+                }
             })
             .catch(error => {
                 setOpenError(true);
@@ -290,11 +333,54 @@ function Add({ atts }) {
                 </Grid>
                 {
                     contactId ?
-                        <Grid item xs={12} className={classes.Containers}>
-                            <Paper className={classes.Papers}>
-                                <ImagesUp contactId={contactId}/>
-                            </Paper>
-                        </Grid>
+                        <React.Fragment>
+                            <Grid item xs={12} className={classes.Containers}>
+                                <Paper className={classes.Papers}>
+                                    <ImagesUp contactId={contactId}/>
+                                </Paper>
+                            </Grid>
+                            <Grid item xs={12} className={classes.Containers}>
+                                <Paper className={classes.Papers}>
+                                    <Typography variant='h4' color='secondary'>Contact Phone Numbers</Typography>
+                                    <Typography variant='body1' color='primary'>You can add multiple phone numbers here.</Typography>
+                                    <Grid className={classes.inputLine}>
+                                        <PhoneIcon className={classes.icons}/>
+                                        <TextField
+                                            id="number"
+                                            label="number"
+                                            variant="outlined"
+                                            type={"number"}
+                                            style={{width: '85%'}}
+                                            inputRef={ref => {
+                                                phone_number = ref;
+                                            }}
+                                        />
+                                    </Grid>
+                                    <FormControl className={classes.formControl}>
+                                        <InputLabel id="select-label">Phone Category</InputLabel>
+                                        <Select
+                                            labelId="select-label"
+                                            id="select"
+                                            onChange={handleChange}
+                                        >
+                                            <MenuItem value={'HOME'}>HOME</MenuItem>
+                                            <MenuItem value={'OFFICE'}>OFFICE</MenuItem>
+                                            <MenuItem value={'MOBILE'}>MOBILE</MenuItem>
+                                            <MenuItem value={'FAX'}>FAX</MenuItem>
+                                            <MenuItem value={'PERSONAL'}>PERSONAL</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                    <Button
+                                        disableRipple
+                                        className={ classes.submitButton }
+                                        variant={ "outlined" }
+                                        onClick={handlePhone}
+                                    >
+                                        Add Phone Number
+                                    </Button>
+                                </Paper>
+                            </Grid>
+                        </React.Fragment>
                         : null
                 }
                 <Snackbar open={openSuccess} autoHideDuration={3000} onClose={handleClose}>
