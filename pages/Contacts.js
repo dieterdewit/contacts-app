@@ -6,13 +6,28 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
-import Button from "@material-ui/core/Button";
+import {makeStyles} from "@material-ui/core/styles";
+import Divider from "@material-ui/core/Divider";
+import Pagination from "@material-ui/lab/Pagination";
+
+const useStyles = makeStyles(theme => ({
+    title: {
+        marginTop: 30,
+        color: theme.palette.primary.main,
+        fontWeight: 'bold'
+    },
+}));
 
 function Contacts({contacts}) {
+    const classes = useStyles();
+    const [page, setPage] = React.useState(1);
     const [openContacts, setOpenContacts] = useState(false);
-    const handleSubmit = e => {
-        e.preventDefault();
+
+    const handleSubmit = (event, value) => {
+        event.preventDefault();
         setOpenContacts(!openContacts);
+
+        setPage(value);
     };
 
     return (
@@ -25,38 +40,37 @@ function Contacts({contacts}) {
                 />
             </Head>
             <Container maxWidth='lg'>
-                <Typography variant='h1'>
+                <Typography variant='h2' className={classes.title}>
                     Welcome to your Contacts
                 </Typography>
-                <div>Your Contacts Raw: {JSON.stringify(contacts)}</div>
-                <Button
+                <Divider />
+                <Pagination
+                    count={Math.ceil(contacts.length/10)}
+                    page={page}
                     style={{ marginBottom: 15, marginTop: 10 }}
-                    onClick={ handleSubmit }
-                    variant={'outlined'}
-                >
-                    Load
-                </Button>
-                {openContacts && (
-                    <Grid item>
-                        {
-                            contacts.map(
-                                ({full_name, email, updatedOn}) =>
-                                    <Paper
-                                        style={{ marginBottom: 10, padding: 10 }}
-                                    >
-                                        <Typography variant='h4'>
-                                            {full_name}
-                                        </Typography>
-                                        <Typography variant='body1'>
-                                            {email}
-                                        </Typography>
-                                        <Typography variant='body2'>
-                                            {updatedOn}
-                                        </Typography>
-                                    </Paper>
+                    onChange={handleSubmit}
+                    variant="outlined"
+                    color="secondary"
+                />
+                <Grid item>
+                    {
+                        contacts.slice((page-1)*10, (page*10)-1).map(
+                            ({full_name, email, updatedOn}) =>
+                                <Paper
+                                    style={{ marginBottom: 10, padding: 10 }}
+                                >
+                                    <Typography variant='h4'>
+                                        {full_name}
+                                    </Typography>
+                                    <Typography variant='body1'>
+                                        {email}
+                                    </Typography>
+                                    <Typography variant='body2'>
+                                        {updatedOn}
+                                    </Typography>
+                                </Paper>
                         )}
-                    </Grid>
-                )}
+                </Grid>
             </Container>
         </React.Fragment>
     );
@@ -65,7 +79,7 @@ function Contacts({contacts}) {
 Contacts.getInitialProps = async ctx => {
     const ssrToken = checkServerSideCookie(ctx);
 
-    const { token } = ctx.store.getState().logged.logged.token;
+    const token = ctx.store.getState().logged.logged.token;
     const userId = ctx.store.getState().logged.logged.userId;
 
     if (token || ssrToken){
@@ -76,6 +90,12 @@ Contacts.getInitialProps = async ctx => {
             }
         });
         const contacts = response.data;
+        return {
+            contacts
+        };
+    }
+    else {
+        const contacts = []
         return {
             contacts
         };

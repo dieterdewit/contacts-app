@@ -88,9 +88,9 @@ function CustomMenu(props) {
                                         onClick={ handleClose }
                                         component={ Link }
                                         naked
-                                        href="/Contacts"
+                                        href="/Add"
                                     >
-                                        Contacts Book
+                                        Add Contact
                                     </MenuItem>
                                     <MenuItem
                                         onClick={ props.logout }

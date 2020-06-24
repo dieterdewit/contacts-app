@@ -16,6 +16,12 @@ import { login } from "../redux/actions/loginActions";
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import Router from 'next/router';
+import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
+import Input from "@material-ui/core/Input";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from "@material-ui/core/IconButton";
+import {Visibility, VisibilityOff} from "@material-ui/icons";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -51,6 +57,10 @@ const useStyles = makeStyles(theme => ({
         color: theme.palette.secondary.main,
         fontWeight: 'bold'
     },
+    textField: {
+        flexBasis: 200,
+        width: '100%'
+    },
 }));
 
 function Alert(props) {
@@ -64,6 +74,8 @@ function Index(props) {
     let new_password;
     let log_username;
     let log_password;
+
+    const [showPassword, setShowPassword] = React.useState(false);
 
     useEffect( () => {
         if (props.state.registered.registered.status === 200){
@@ -101,6 +113,10 @@ function Index(props) {
 
         const user = { username, password };
         props.login(user);
+    };
+
+    const handleClickShowPassword = () => {
+        setShowPassword(!showPassword);
     };
 
     return (
@@ -150,13 +166,25 @@ function Index(props) {
                             <Grid className={classes.inputLine}>
                                 <VpnKeyIcon className={classes.icons}/>
                                 <TextField
-                                    id="password"
-                                    label="password"
+                                    id="adornment-password"
+                                    className={classes.textField}
                                     variant="outlined"
-                                    type={"password"}
-                                    style={{width: '100%'}}
+                                    type={showPassword ? 'text' : 'password'}
+                                    label="Password"
                                     inputRef={ref => {
                                         new_password = ref;
+                                    }}
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="Toggle password visibility"
+                                                    onClick={handleClickShowPassword}
+                                                >
+                                                    {!showPassword ? <VisibilityOff /> : <Visibility />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
                                     }}
                                 />
                             </Grid>
@@ -208,13 +236,25 @@ function Index(props) {
                             <Grid className={classes.inputLine}>
                                 <VpnKeyIcon className={classes.icons}/>
                                 <TextField
-                                    id="password"
-                                    label="password"
+                                    id="adornment-password"
+                                    className={classes.textField}
                                     variant="outlined"
-                                    type={"password"}
-                                    style={{width: '100%'}}
+                                    type={showPassword ? 'text' : 'password'}
+                                    label="password"
                                     inputRef={ref => {
                                         log_password = ref;
+                                    }}
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="Toggle password visibility"
+                                                    onClick={handleClickShowPassword}
+                                                >
+                                                    {!showPassword ? <VisibilityOff /> : <Visibility />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
                                     }}
                                 />
                             </Grid>

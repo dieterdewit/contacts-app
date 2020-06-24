@@ -83,10 +83,10 @@ class CustomizedTabs extends Component {
                         aria-label="menuTabs"
                     >
                         <StyledTab
-                            label="Contacts Book"
+                            label="Add Contact"
                             component={ Link }
                             naked
-                            href="/Contacts"
+                            href="/Add"
                             style={{ fontSize: 20 }}
                             onClick={ this.props.pageOneTabs }
                         />

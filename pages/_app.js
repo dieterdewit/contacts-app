@@ -14,6 +14,7 @@ import AppHeader from "../components/layout/AppBar";
 
 const store = Store();
 
+
 function MyApp(props) {
     const { Component, pageProps } = props;
 

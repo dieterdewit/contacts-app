@@ -3,6 +3,7 @@ export const LOGOUT = 'LOGOUT';
 
 import axios from 'axios';
 import cookie from 'js-cookie';
+import Router from 'next/router';
 
 export const login = user => dispatch =>
     axios({
@@ -24,7 +25,7 @@ export const login = user => dispatch =>
 export const logout = () => {
     return dispatch => {
         removeCookie('token');
-        //Router.push('/');
+        Router.push('/');
         dispatch({ type: 'LOGOUT' });
     };
 };
