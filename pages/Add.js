@@ -195,7 +195,6 @@ function Add({ atts }) {
 
     const handleChange = event => {
         setPhone(event.target.value);
-        console.log(phone)
     };
 
     const handleClose = (event, reason) => {
